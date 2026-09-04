@@ -1,0 +1,527 @@
+[
+  {
+    "name": "display_logo_or_headline",
+    "label": "Show at the top",
+    "type": "choice",
+    "display": "radio",
+    "default": "logo",
+    "choices": [
+      [
+        "logo",
+        "A logo"
+      ],
+      [
+        "headline",
+        "A headline"
+      ]
+    ]
+  },
+  {
+    "name": "logo_img",
+    "label": "Logo",
+    "type": "image",
+    "responsive": true,
+    "resizable": true,
+    "show_loading": false,
+    "visibility": {
+      "controlling_field_path": "display_logo_or_headline",
+      "operator": "EQUAL",
+      "controlling_value_regex": "logo"
+    },
+    "default": {
+      "size_type": "auto_custom_max",
+      "src": "https://26908810.fs1.hubspotusercontent-eu1.net/hubfs/26908810/positive.webp",
+      "alt": "positive",
+      "loading": "lazy",
+      "width": 185,
+      "height": 52,
+      "max_width": 200,
+      "max_height": 56
+    }
+  },
+  {
+    "name": "text_content",
+    "label": "Text",
+    "type": "group",
+    "expanded": true,
+    "children": [
+      {
+        "name": "headline_text",
+        "label": "Headline",
+        "type": "text",
+        "default": "Hello world",
+        "visibility": {
+          "controlling_field_path": "display_logo_or_headline",
+          "operator": "EQUAL",
+          "controlling_value_regex": "headline"
+        }
+      },
+      {
+        "name": "headline_level",
+        "label": "Headline level",
+        "type": "choice",
+        "display": "select",
+        "default": "h2",
+        "choices": [
+          [
+            "h2",
+            "Heading 2"
+          ],
+          [
+            "h3",
+            "Heading 3"
+          ],
+          [
+            "h4",
+            "Heading 4"
+          ],
+          [
+            "p",
+            "Not a heading"
+          ]
+        ],
+        "help_text": "Match the page outline. Use Heading 3 if a Heading 2 already sits above.",
+        "visibility": {
+          "controlling_field_path": "display_logo_or_headline",
+          "operator": "EQUAL",
+          "controlling_value_regex": "headline"
+        }
+      },
+      {
+        "name": "paragraph_text",
+        "label": "Quote",
+        "type": "richtext",
+        "default": "<p>\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\"</p>"
+      },
+      {
+        "name": "title_text",
+        "label": "Name",
+        "type": "text",
+        "default": "John Smith"
+      },
+      {
+        "name": "subtitle_text",
+        "label": "Role",
+        "type": "text",
+        "default": "CEO of a Company"
+      },
+      {
+        "name": "avatar",
+        "label": "Photo",
+        "type": "image",
+        "responsive": false,
+        "resizable": false,
+        "help_text": "Optional. Sits beside the name. Rendered as decorative, since the name is already read out.",
+        "default": {
+          "size_type": "auto",
+          "src": "",
+          "alt": "",
+          "loading": "lazy"
+        }
+      }
+    ]
+  },
+  {
+    "name": "button",
+    "label": "Button",
+    "type": "group",
+    "expanded": false,
+    "children": [
+      {
+        "name": "show",
+        "label": "Show a button",
+        "type": "boolean",
+        "display": "toggle",
+        "default": false
+      },
+      {
+        "name": "button_text",
+        "label": "Button text",
+        "type": "text",
+        "default": "Read the story"
+      },
+      {
+        "name": "link",
+        "label": "Button link",
+        "type": "link",
+        "supported_types": [
+          "EXTERNAL",
+          "CONTENT",
+          "FILE",
+          "EMAIL_ADDRESS",
+          "BLOG",
+          "CALL_TO_ACTION",
+          "PHONE_NUMBER"
+        ],
+        "default": {
+          "url": {
+            "content_id": null,
+            "type": "EXTERNAL",
+            "href": ""
+          },
+          "open_in_new_tab": false,
+          "no_follow": false
+        }
+      }
+    ]
+  },
+  {
+    "name": "card_style",
+    "label": "Card",
+    "type": "group",
+    "tab": "STYLE",
+    "children": [
+      {
+        "name": "card_layout",
+        "label": "Layout",
+        "type": "group",
+        "tab": "STYLE",
+        "children": [
+          {
+            "name": "arrangement",
+            "label": "Arrangement",
+            "type": "group",
+            "tab": "STYLE",
+            "children": [
+              {
+                "name": "orientation",
+                "label": "Layout",
+                "type": "choice",
+                "display": "radio",
+                "default": "stacked",
+                "choices": [
+                  [
+                    "stacked",
+                    "Everything stacked"
+                  ],
+                  [
+                    "side",
+                    "Logo or photo beside the text"
+                  ]
+                ],
+                "help_text": "Side by side stacks on its own when the card is narrow."
+              },
+              {
+                "name": "align",
+                "label": "Text alignment",
+                "type": "choice",
+                "display": "radio",
+                "default": "left",
+                "choices": [
+                  [
+                    "left",
+                    "Left"
+                  ],
+                  [
+                    "center",
+                    "Centred"
+                  ]
+                ]
+              },
+              {
+                "name": "width_mode",
+                "label": "Width",
+                "type": "choice",
+                "display": "radio",
+                "default": "contained",
+                "choices": [
+                  [
+                    "contained",
+                    "Capped and centred"
+                  ],
+                  [
+                    "fill",
+                    "Fill the column"
+                  ]
+                ],
+                "help_text": "Fill is for placing the card in a two or three column row."
+              },
+              {
+                "name": "avatar_size",
+                "label": "Photo size",
+                "type": "number",
+                "min": 32,
+                "max": 120,
+                "step": 1,
+                "suffix": "px",
+                "default": 56
+              }
+            ]
+          },
+          {
+            "name": "card_text_style",
+            "label": "Text colours",
+            "type": "group",
+            "tab": "STYLE",
+            "children": [
+              {
+                "name": "headline_text_color",
+                "label": "Headline",
+                "type": "color",
+                "default": {
+                  "color": "#1A1A1A",
+                  "opacity": 100
+                }
+              },
+              {
+                "name": "card_title_text_color",
+                "label": "Name",
+                "type": "color",
+                "default": {
+                  "color": "#1A1A1A",
+                  "opacity": 100
+                }
+              },
+              {
+                "name": "card_subtitle_text_color",
+                "label": "Role",
+                "type": "color",
+                "default": {
+                  "color": "#6F6F6F",
+                  "opacity": 100
+                },
+                "help_text": "Keep this at 4.5:1 against the card background or lighter text fails WCAG AA."
+              }
+            ]
+          },
+          {
+            "name": "card_style",
+            "label": "Card surface",
+            "type": "group",
+            "tab": "STYLE",
+            "children": [
+              {
+                "name": "card_background_color",
+                "label": "Background",
+                "type": "color",
+                "default": {
+                  "color": "#FFFFFF",
+                  "opacity": 100
+                }
+              },
+              {
+                "name": "card_width",
+                "label": "Maximum width",
+                "type": "number",
+                "min": 320,
+                "max": 1600,
+                "step": 10,
+                "suffix": "px",
+                "default": 800
+              },
+              {
+                "name": "card_padding",
+                "label": "Inner padding",
+                "type": "number",
+                "min": 8,
+                "max": 80,
+                "step": 1,
+                "suffix": "px",
+                "default": 32
+              },
+              {
+                "name": "card_radius",
+                "label": "Corner radius",
+                "type": "number",
+                "min": 0,
+                "max": 48,
+                "step": 1,
+                "suffix": "px",
+                "default": 20
+              },
+              {
+                "name": "show_shadow",
+                "label": "Show shadow",
+                "type": "boolean",
+                "display": "toggle",
+                "default": true
+              },
+              {
+                "name": "shadow_color",
+                "label": "Shadow colour",
+                "type": "color",
+                "default": {
+                  "color": "#35B28D",
+                  "opacity": 100
+                },
+                "visibility": {
+                  "controlling_field_path": "card_style.card_layout.card_style.show_shadow",
+                  "operator": "EQUAL",
+                  "controlling_value_regex": "true"
+                }
+              },
+              {
+                "name": "shadow_depth",
+                "label": "Shadow depth",
+                "type": "number",
+                "min": 0,
+                "max": 24,
+                "step": 1,
+                "suffix": "px",
+                "default": 10,
+                "visibility": {
+                  "controlling_field_path": "card_style.card_layout.card_style.show_shadow",
+                  "operator": "EQUAL",
+                  "controlling_value_regex": "true"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "hover_animation",
+        "label": "Grow on hover",
+        "type": "boolean",
+        "display": "toggle",
+        "default": false,
+        "help_text": "The card scales up slightly. The green shadow scales with it."
+      },
+      {
+        "name": "hover_scale",
+        "label": "Hover growth",
+        "type": "number",
+        "min": 100,
+        "max": 112,
+        "step": 1,
+        "suffix": "%",
+        "default": 103,
+        "visibility": {
+          "controlling_field_path": "card_style.hover_animation",
+          "operator": "EQUAL",
+          "controlling_value_regex": "true"
+        }
+      }
+    ]
+  },
+  {
+    "name": "button_style",
+    "label": "Button",
+    "type": "group",
+    "tab": "STYLE",
+    "children": [
+      {
+        "name": "bg",
+        "label": "Background",
+        "type": "color",
+        "default": {
+          "color": "#C3F73A",
+          "opacity": 100
+        }
+      },
+      {
+        "name": "text",
+        "label": "Text",
+        "type": "color",
+        "default": {
+          "color": "#101913",
+          "opacity": 100
+        }
+      },
+      {
+        "name": "hover_bg",
+        "label": "Hover background",
+        "type": "color",
+        "default": {
+          "color": "#35B28D",
+          "opacity": 100
+        }
+      },
+      {
+        "name": "hover_text",
+        "label": "Hover text",
+        "type": "color",
+        "default": {
+          "color": "#111111",
+          "opacity": 100
+        }
+      },
+      {
+        "name": "shadow_color",
+        "label": "Shadow colour",
+        "type": "color",
+        "default": {
+          "color": "#35B28D",
+          "opacity": 100
+        }
+      },
+      {
+        "name": "shadow_depth",
+        "label": "Shadow depth",
+        "type": "number",
+        "min": 0,
+        "max": 12,
+        "step": 1,
+        "suffix": "px",
+        "default": 5
+      },
+      {
+        "name": "radius",
+        "label": "Corner radius",
+        "type": "number",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "suffix": "px",
+        "default": 8
+      },
+      {
+        "name": "size",
+        "label": "Text size",
+        "type": "number",
+        "min": 11,
+        "max": 20,
+        "step": 1,
+        "suffix": "px",
+        "default": 15
+      },
+      {
+        "name": "focus_color",
+        "label": "Keyboard focus ring",
+        "type": "color",
+        "default": {
+          "color": "#1D624D",
+          "opacity": 100
+        }
+      }
+    ]
+  },
+  {
+    "name": "typography",
+    "label": "Type sizes",
+    "type": "group",
+    "tab": "STYLE",
+    "children": [
+      {
+        "name": "headline_size",
+        "label": "Headline",
+        "type": "number",
+        "min": 14,
+        "max": 60,
+        "step": 1,
+        "suffix": "px",
+        "default": 26
+      },
+      {
+        "name": "title_size",
+        "label": "Name",
+        "type": "number",
+        "min": 12,
+        "max": 32,
+        "step": 1,
+        "suffix": "px",
+        "default": 18
+      },
+      {
+        "name": "subtitle_size",
+        "label": "Role",
+        "type": "number",
+        "min": 10,
+        "max": 24,
+        "step": 1,
+        "suffix": "px",
+        "default": 15
+      }
+    ]
+  }
+]

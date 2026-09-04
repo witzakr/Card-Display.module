@@ -1,0 +1,273 @@
+/* Proba — Quote card
+   Root class doubled to outrank theme selectors. Tokens live on the
+   root element, never :root, so they can't leak to other modules. */
+
+/* ---------- Tokens ---------- */
+.pqc-outer.pqc-outer {
+  --pqc-font: 'Lexend', Arial, Helvetica, sans-serif;
+
+  --pqc-card-bg: #fff;
+  --pqc-max-width: 800px;
+  --pqc-pad: 32px;
+  --pqc-radius: 20px;
+  --pqc-shadow-color: #35b28d;
+  --pqc-shadow-depth: 10px;
+
+  --pqc-headline-color: #1a1a1a;
+  --pqc-title-color: #1a1a1a;
+  --pqc-subtitle-color: #6f6f6f;
+
+  --pqc-headline-size: 26px;
+  --pqc-title-size: 18px;
+  --pqc-subtitle-size: 15px;
+
+  /* one rhythm for the whole card */
+  --pqc-gap: 20px;
+  --pqc-gap-tight: 4px;
+  --pqc-avatar-size: 56px;
+
+  --pqc-btn-bg: #c3f73a;
+  --pqc-btn-text: #101913;
+  --pqc-btn-hover-bg: #35b28d;
+  --pqc-btn-hover-text: #111;
+  --pqc-btn-shadow-color: #35b28d;
+  --pqc-btn-shadow: 5px;
+  --pqc-btn-radius: 8px;
+  --pqc-btn-size: 15px;
+  --pqc-focus-color: #1d624d;
+
+  --pqc-hover-duration: 0.35s;
+  --pqc-hover-scale: 1.03;
+}
+
+/* ---------- Reset ---------- */
+.pqc-outer.pqc-outer,
+.pqc-outer.pqc-outer *,
+.pqc-outer.pqc-outer *::before,
+.pqc-outer.pqc-outer *::after {
+  box-sizing: border-box;
+}
+
+/* :where() keeps tag names at zero, so rules below always win */
+.pqc-outer.pqc-outer :where(div, p, h2, h3, h4, span, img, a, ul, ol, li, figure, figcaption, blockquote) {
+  position: static;
+  float: none;
+  width: auto;
+  max-width: none;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+  background: none;
+}
+
+/* ---------- Shell ---------- */
+.pqc-outer.pqc-outer {
+  container: pqc / inline-size;
+  position: relative;
+  isolation: isolate;
+  clear: both;
+  width: 100%;
+  font-family: var(--pqc-font);
+}
+
+.pqc-outer.pqc-outer .pqc-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--pqc-gap);
+  width: 100%;
+  max-width: var(--pqc-max-width);
+  margin-inline: auto;
+  padding: var(--pqc-pad);
+  height: 100%;
+  border-radius: var(--pqc-radius);
+  background: var(--pqc-card-bg);
+  box-shadow: 0 var(--pqc-shadow-depth) 0 0 var(--pqc-shadow-color);
+}
+
+/* fill mode drops the cap so the card takes the whole column */
+.pqc-outer.pqc-outer.pqc-fill .pqc-card {
+  max-width: none;
+}
+
+/* centred variant */
+.pqc-outer.pqc-outer.pqc-center .pqc-card,
+.pqc-outer.pqc-outer.pqc-center .pqc-main {
+  align-items: center;
+  text-align: center;
+}
+
+.pqc-outer.pqc-outer.pqc-center .pqc-person {
+  justify-content: center;
+}
+
+/* ---------- Structure ---------- */
+.pqc-outer.pqc-outer .pqc-lede:empty {
+  display: none;
+}
+
+.pqc-outer.pqc-outer .pqc-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--pqc-gap);
+  min-width: 0;
+  width: 100%;
+}
+
+/* side by side: the logo or headline sits in its own column */
+@container pqc (min-width: 560px) {
+  .pqc-outer.pqc-outer.pqc-side .pqc-card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 2fr);
+    align-items: start;
+  }
+
+  .pqc-outer.pqc-outer.pqc-side.pqc-center .pqc-lede {
+    justify-self: center;
+  }
+}
+
+/* ---------- Top slot ---------- */
+.pqc-outer.pqc-outer .pqc-logo {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.pqc-outer.pqc-outer .pqc-headline {
+  font-size: var(--pqc-headline-size);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--pqc-headline-color);
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+/* ---------- Quote ---------- */
+/* no colour or size here — the rich text editor owns the quote's formatting */
+.pqc-outer.pqc-outer .pqc-quote {
+  line-height: 1.6;
+  overflow-wrap: break-word;
+}
+
+.pqc-outer.pqc-outer .pqc-quote p + p {
+  margin-top: 0.75em;
+}
+
+/* ---------- Byline ---------- */
+.pqc-outer.pqc-outer .pqc-person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.pqc-outer.pqc-outer .pqc-avatar {
+  flex: 0 0 auto;
+  width: var(--pqc-avatar-size);
+  height: var(--pqc-avatar-size);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.pqc-outer.pqc-outer .pqc-byline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pqc-gap-tight);
+}
+
+.pqc-outer.pqc-outer .pqc-name {
+  font-size: var(--pqc-title-size);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--pqc-title-color);
+  overflow-wrap: break-word;
+}
+
+.pqc-outer.pqc-outer .pqc-role {
+  font-size: var(--pqc-subtitle-size);
+  line-height: 1.4;
+  color: var(--pqc-subtitle-color);
+  overflow-wrap: break-word;
+}
+
+/* ---------- Button ---------- */
+.pqc-outer.pqc-outer .pqc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 26px;
+  border-radius: var(--pqc-btn-radius);
+  font-size: var(--pqc-btn-size);
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  color: var(--pqc-btn-text);
+  background: var(--pqc-btn-bg);
+  box-shadow: 0 var(--pqc-btn-shadow) 0 0 var(--pqc-btn-shadow-color);
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.pqc-outer.pqc-outer .pqc-btn:active {
+  transform: translateY(var(--pqc-btn-shadow));
+  box-shadow: 0 0 0 0 var(--pqc-btn-shadow-color);
+}
+
+/* the browser default ring is faint on the lime button */
+.pqc-outer.pqc-outer :is(a, button):focus-visible {
+  outline: 3px solid var(--pqc-focus-color);
+  outline-offset: 3px;
+}
+
+/* ---------- Narrow ---------- */
+/* an element cannot answer its own container query, so these land on the
+   card — every token below is read by the card or something inside it */
+@container pqc (max-width: 600px) {
+  .pqc-outer.pqc-outer .pqc-card {
+    --pqc-pad: 24px;
+    --pqc-gap: 16px;
+    --pqc-headline-size: 22px;
+    --pqc-title-size: 17px;
+  }
+}
+
+@container pqc (max-width: 380px) {
+  .pqc-outer.pqc-outer .pqc-card {
+    --pqc-pad: 18px;
+    --pqc-radius: 14px;
+    --pqc-shadow-depth: 6px;
+    --pqc-headline-size: 20px;
+    --pqc-avatar-size: 44px;
+  }
+}
+
+/* ---------- Hover (pointer devices only) ---------- */
+/* the card grows; the green shadow scales with it and stays the only one */
+@media (hover: hover) {
+  .pqc-outer.pqc-outer .pqc-btn:hover {
+    color: var(--pqc-btn-hover-text);
+    background: var(--pqc-btn-hover-bg);
+    box-shadow: 0 0 0 0 var(--pqc-btn-shadow-color);
+  }
+
+  .pqc-outer.pqc-outer .pqc-card.pqc-has-hover {
+    transform-origin: center bottom;
+    transition: scale var(--pqc-hover-duration) cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .pqc-outer.pqc-outer .pqc-card.pqc-has-hover:hover {
+    scale: var(--pqc-hover-scale);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pqc-outer.pqc-outer * {
+    transition-duration: 0.01ms !important;
+  }
+}

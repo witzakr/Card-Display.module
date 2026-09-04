@@ -1,0 +1,125 @@
+{# Proba — Quote card #}
+
+{% macro col(field, fallback) %}{% if field and field.color %}rgba({{ field.color|convert_rgb }}, {{ field.opacity|default(100) / 100 }}){% else %}{{ fallback }}{% endif %}{% endmacro %}
+
+{% set uid   = "pqc-" ~ name %}
+{% set txt   = module.text_content %}
+{% set btn   = module.button %}
+{% set arr   = module.card_style.card_layout.arrangement %}
+{% set surf  = module.card_style.card_layout.card_style %}
+{% set ink   = module.card_style.card_layout.card_text_style %}
+{% set bs    = module.button_style %}
+{% set ty    = module.typography %}
+{% set logo  = module.logo_img %}
+
+{% set href = btn.link.url.href|default("", true) %}
+{% if btn.link.url.type == "EMAIL_ADDRESS" and href %}{% set href = "mailto:" ~ href %}{% endif %}
+{% if btn.link.url.type == "PHONE_NUMBER" and href %}{% set href = "tel:" ~ href %}{% endif %}
+
+{% require_head %}
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap">
+{% end_require_head %}
+
+{% require_css %}
+<style>
+  #{{ uid }} {
+    --pqc-card-bg: {{ col(surf.card_background_color, '#ffffff') }};
+    --pqc-max-width: {{ surf.card_width|default(800) }}px;
+    --pqc-pad: {{ surf.card_padding|default(32) }}px;
+    --pqc-radius: {{ surf.card_radius|default(20) }}px;
+    --pqc-shadow-color: {{ col(surf.shadow_color, '#35b28d') }};
+    --pqc-shadow-depth: {% if surf.show_shadow %}{{ surf.shadow_depth|default(10) }}px{% else %}0px{% endif %};
+
+    --pqc-headline-color: {{ col(ink.headline_text_color, '#1a1a1a') }};
+    --pqc-title-color: {{ col(ink.card_title_text_color, '#1a1a1a') }};
+    --pqc-subtitle-color: {{ col(ink.card_subtitle_text_color, '#6f6f6f') }};
+
+    --pqc-headline-size: {{ ty.headline_size|default(26) }}px;
+    --pqc-title-size: {{ ty.title_size|default(18) }}px;
+    --pqc-subtitle-size: {{ ty.subtitle_size|default(15) }}px;
+
+    --pqc-avatar-size: {{ arr.avatar_size|default(56) }}px;
+    --pqc-hover-scale: {{ module.card_style.hover_scale|default(103) / 100 }};
+
+    --pqc-btn-bg: {{ col(bs.bg, '#c3f73a') }};
+    --pqc-btn-text: {{ col(bs.text, '#101913') }};
+    --pqc-btn-hover-bg: {{ col(bs.hover_bg, '#35b28d') }};
+    --pqc-btn-hover-text: {{ col(bs.hover_text, '#111111') }};
+    --pqc-btn-shadow-color: {{ col(bs.shadow_color, '#35b28d') }};
+    --pqc-btn-shadow: {{ bs.shadow_depth|default(5) }}px;
+    --pqc-btn-radius: {{ bs.radius|default(8) }}px;
+    --pqc-btn-size: {{ bs.size|default(15) }}px;
+    --pqc-focus-color: {{ col(bs.focus_color, '#1d624d') }};
+  }
+</style>
+{% end_require_css %}
+
+{% set shell_class = "pqc-outer" %}
+{% if arr.orientation == 'side' %}{% set shell_class = shell_class ~ " pqc-side" %}{% endif %}
+{% if arr.align == 'center' %}{% set shell_class = shell_class ~ " pqc-center" %}{% endif %}
+{% if arr.width_mode == 'fill' %}{% set shell_class = shell_class ~ " pqc-fill" %}{% endif %}
+
+<div id="{{ uid }}" class="{{ shell_class }}">
+  <div class="pqc-card{% if module.card_style.hover_animation %} pqc-has-hover{% endif %}">
+
+    <div class="pqc-lede">
+      {% if module.display_logo_or_headline == 'logo' %}
+        {% if logo.src %}
+          {% set logo_w = logo.width %}
+          {% set logo_h = logo.height %}
+          {% if logo.size_type == 'auto_custom_max' %}
+            {% set logo_w = logo.max_width %}
+            {% set logo_h = logo.max_height %}
+          {% endif %}
+
+          <img class="pqc-logo"
+               src="{{ logo.src|escape_url }}"
+               alt="{{ logo.alt|escape_attr }}"
+               width="{{ logo_w }}"
+               height="{{ logo_h }}"
+               {% if logo.loading != 'disabled' %}loading="{{ logo.loading|escape_attr }}"{% endif %}
+               decoding="async">
+        {% endif %}
+      {% else %}
+        {% set tag = txt.headline_level|default('h2', true) %}
+        <{{ tag }} class="pqc-headline">
+          {% inline_text field="text_content.headline_text" value="{{ txt.headline_text }}" %}
+        </{{ tag }}>
+      {% endif %}
+    </div>
+
+    <figure class="pqc-main">
+      <blockquote class="pqc-quote">
+        {% inline_rich_text field="text_content.paragraph_text" value="{{ txt.paragraph_text }}" %}
+      </blockquote>
+
+      {% if txt.title_text or txt.subtitle_text or txt.avatar.src %}
+        <figcaption class="pqc-person">
+          {% if txt.avatar.src %}
+            <img class="pqc-avatar" src="{{ txt.avatar.src|escape_url }}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+          {% endif %}
+
+          <div class="pqc-byline">
+            {% if txt.title_text %}
+              <div class="pqc-name">
+                {% inline_text field="text_content.title_text" value="{{ txt.title_text }}" %}
+              </div>
+            {% endif %}
+
+            {% if txt.subtitle_text %}
+              <div class="pqc-role">
+                {% inline_text field="text_content.subtitle_text" value="{{ txt.subtitle_text }}" %}
+              </div>
+            {% endif %}
+          </div>
+        </figcaption>
+      {% endif %}
+
+      {% if btn.show and btn.button_text %}
+        <a class="pqc-btn" href="{{ href|escape_url|default('#', true) }}"{% if btn.link.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ btn.button_text }}</a>
+      {% endif %}
+    </figure>
+
+  </div>
+</div>
