@@ -1,7 +1,3 @@
-/* Proba — Quote card
-   Root class doubled to outrank theme selectors. Tokens live on the
-   root element, never :root, so they can't leak to other modules. */
-
 /* ---------- Tokens ---------- */
 .pqc-outer.pqc-outer {
   --pqc-font: 'Lexend', Arial, Helvetica, sans-serif;
@@ -21,7 +17,6 @@
   --pqc-title-size: 18px;
   --pqc-subtitle-size: 15px;
 
-  /* one rhythm for the whole card */
   --pqc-gap: 20px;
   --pqc-gap-tight: 4px;
   --pqc-avatar-size: 56px;

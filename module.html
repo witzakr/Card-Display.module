@@ -1,5 +1,3 @@
-{# Proba — Quote card #}
-
 {% macro col(field, fallback) %}{% if field and field.color %}rgba({{ field.color|convert_rgb }}, {{ field.opacity|default(100) / 100 }}){% else %}{{ fallback }}{% endif %}{% endmacro %}
 
 {% set uid   = "pqc-" ~ name %}
