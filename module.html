@@ -1,19 +1,14 @@
+{# Proba — Quote card (1–3 cards) #}
 
 {% macro col(field, fallback) %}{% if field and field.color %}rgba({{ field.color|convert_rgb }}, {{ field.opacity|default(100) / 100 }}){% else %}{{ fallback }}{% endif %}{% endmacro %}
 
 {% set uid   = "pqc-" ~ name %}
-{% set txt   = module.text_content %}
-{% set btn   = module.button %}
+{% set cards = module.cards %}
 {% set arr   = module.card_style.card_layout.arrangement %}
 {% set surf  = module.card_style.card_layout.card_style %}
 {% set ink   = module.card_style.card_layout.card_text_style %}
 {% set bs    = module.button_style %}
 {% set ty    = module.typography %}
-{% set logo  = module.logo_img %}
-
-{% set href = btn.link.url.href|default("", true) %}
-{% if btn.link.url.type == "EMAIL_ADDRESS" and href %}{% set href = "mailto:" ~ href %}{% endif %}
-{% if btn.link.url.type == "PHONE_NUMBER" and href %}{% set href = "tel:" ~ href %}{% endif %}
 
 {% require_head %}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,71 +49,84 @@
 </style>
 {% end_require_css %}
 
-{% set shell_class = "pqc-outer" %}
+{% set shell_class = "pqc-outer pqc-count-" ~ (cards|length) %}
 {% if arr.orientation == 'side' %}{% set shell_class = shell_class ~ " pqc-side" %}{% endif %}
 {% if arr.align == 'center' %}{% set shell_class = shell_class ~ " pqc-center" %}{% endif %}
 {% if arr.width_mode == 'fill' %}{% set shell_class = shell_class ~ " pqc-fill" %}{% endif %}
 
+{% if cards %}
 <div id="{{ uid }}" class="{{ shell_class }}">
-  <div class="pqc-card{% if module.card_style.hover_animation %} pqc-has-hover{% endif %}">
+  <div class="pqc-row">
+    {% for card in cards %}
+      {% set txt  = card.text_content %}
+      {% set btn  = card.button %}
+      {% set logo = card.logo_img %}
+      {% set show = card.display_logo_or_headline|default('logo', true) %}
+      {% set want_logo = (show == 'logo' or show == 'both') and logo.src %}
+      {% set want_head = (show == 'headline' or show == 'both') and txt.headline_text %}
 
-    <div class="pqc-lede">
-      {% if module.display_logo_or_headline == 'logo' %}
-        {% if logo.src %}
-          {% set logo_w = logo.width %}
-          {% set logo_h = logo.height %}
-          {% if logo.size_type == 'auto_custom_max' %}
-            {% set logo_w = logo.max_width %}
-            {% set logo_h = logo.max_height %}
+      {% set href = btn.link.url.href|default("", true) %}
+      {% if btn.link.url.type == "EMAIL_ADDRESS" and href %}{% set href = "mailto:" ~ href %}{% endif %}
+      {% if btn.link.url.type == "PHONE_NUMBER" and href %}{% set href = "tel:" ~ href %}{% endif %}
+
+      <div class="pqc-cell">
+        <div class="pqc-card{% if module.card_style.hover_animation %} pqc-has-hover{% endif %}">
+
+          {% if want_logo or want_head %}
+            <div class="pqc-lede">
+              {% if want_logo %}
+                {% set logo_w = logo.width %}
+                {% set logo_h = logo.height %}
+                {% if logo.size_type == 'auto_custom_max' %}
+                  {% set logo_w = logo.max_width %}
+                  {% set logo_h = logo.max_height %}
+                {% endif %}
+                <img class="pqc-logo"
+                     src="{{ logo.src|escape_url }}"
+                     alt="{{ logo.alt|escape_attr }}"
+                     width="{{ logo_w }}"
+                     height="{{ logo_h }}"
+                     {% if logo.loading != 'disabled' %}loading="{{ logo.loading|escape_attr }}"{% endif %}
+                     decoding="async">
+              {% endif %}
+
+              {% if want_head %}
+                {% set tag = txt.headline_level|default('h2', true) %}
+                <{{ tag }} class="pqc-headline">{{ txt.headline_text }}</{{ tag }}>
+              {% endif %}
+            </div>
           {% endif %}
 
-          <img class="pqc-logo"
-               src="{{ logo.src|escape_url }}"
-               alt="{{ logo.alt|escape_attr }}"
-               width="{{ logo_w }}"
-               height="{{ logo_h }}"
-               {% if logo.loading != 'disabled' %}loading="{{ logo.loading|escape_attr }}"{% endif %}
-               decoding="async">
-        {% endif %}
-      {% else %}
-        {% set tag = txt.headline_level|default('h2', true) %}
-        <{{ tag }} class="pqc-headline">
-          {% inline_text field="text_content.headline_text" value="{{ txt.headline_text }}" %}
-        </{{ tag }}>
-      {% endif %}
-    </div>
+          <figure class="pqc-main">
+            <blockquote class="pqc-quote">
+              {{ txt.paragraph_text }}
+            </blockquote>
 
-    <figure class="pqc-main">
-      <blockquote class="pqc-quote">
-        {% inline_rich_text field="text_content.paragraph_text" value="{{ txt.paragraph_text }}" %}
-      </blockquote>
+            {% if txt.title_text or txt.subtitle_text or txt.avatar.src %}
+              <figcaption class="pqc-person">
+                {% if txt.avatar.src %}
+                  <img class="pqc-avatar" src="{{ txt.avatar.src|escape_url }}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                {% endif %}
 
-      {% if txt.title_text or txt.subtitle_text or txt.avatar.src %}
-        <figcaption class="pqc-person">
-          {% if txt.avatar.src %}
-            <img class="pqc-avatar" src="{{ txt.avatar.src|escape_url }}" alt="" aria-hidden="true" loading="lazy" decoding="async">
-          {% endif %}
-
-          <div class="pqc-byline">
-            {% if txt.title_text %}
-              <div class="pqc-name">
-                {% inline_text field="text_content.title_text" value="{{ txt.title_text }}" %}
-              </div>
+                <div class="pqc-byline">
+                  {% if txt.title_text %}
+                    <div class="pqc-name">{{ txt.title_text }}</div>
+                  {% endif %}
+                  {% if txt.subtitle_text %}
+                    <div class="pqc-role">{{ txt.subtitle_text }}</div>
+                  {% endif %}
+                </div>
+              </figcaption>
             {% endif %}
 
-            {% if txt.subtitle_text %}
-              <div class="pqc-role">
-                {% inline_text field="text_content.subtitle_text" value="{{ txt.subtitle_text }}" %}
-              </div>
+            {% if btn.show and btn.button_text %}
+              <a class="pqc-btn" href="{{ href|escape_url|default('#', true) }}"{% if btn.link.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ btn.button_text }}</a>
             {% endif %}
-          </div>
-        </figcaption>
-      {% endif %}
+          </figure>
 
-      {% if btn.show and btn.button_text %}
-        <a class="pqc-btn" href="{{ href|escape_url|default('#', true) }}"{% if btn.link.open_in_new_tab %} target="_blank" rel="noopener"{% endif %}>{{ btn.button_text }}</a>
-      {% endif %}
-    </figure>
-
+        </div>
+      </div>
+    {% endfor %}
   </div>
 </div>
+{% endif %}

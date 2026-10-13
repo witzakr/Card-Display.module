@@ -1,167 +1,204 @@
-
 [
   {
-    "name": "display_logo_or_headline",
-    "label": "Show at the top",
-    "type": "choice",
-    "display": "radio",
-    "default": "logo",
-    "choices": [
-      [
-        "logo",
-        "A logo"
-      ],
-      [
-        "headline",
-        "A headline"
-      ]
-    ]
-  },
-  {
-    "name": "logo_img",
-    "label": "Logo",
-    "type": "image",
-    "responsive": true,
-    "resizable": true,
-    "show_loading": false,
-    "visibility": {
-      "controlling_field_path": "display_logo_or_headline",
-      "operator": "EQUAL",
-      "controlling_value_regex": "logo"
-    },
-    "default": {
-      "size_type": "auto_custom_max",
-      "src": "https://26908810.fs1.hubspotusercontent-eu1.net/hubfs/26908810/positive.webp",
-      "alt": "positive",
-      "loading": "lazy",
-      "width": 185,
-      "height": 52,
-      "max_width": 200,
-      "max_height": 56
-    }
-  },
-  {
-    "name": "text_content",
-    "label": "Text",
+    "name": "cards",
+    "label": "Cards",
     "type": "group",
     "expanded": true,
+    "occurrence": {
+      "min": 1,
+      "max": 3,
+      "default": 1,
+      "sorting_label_field": "cards.text_content.title_text"
+    },
     "children": [
       {
-        "name": "headline_text",
-        "label": "Headline",
-        "type": "text",
-        "default": "Hello world",
-        "visibility": {
-          "controlling_field_path": "display_logo_or_headline",
-          "operator": "EQUAL",
-          "controlling_value_regex": "headline"
-        }
-      },
-      {
-        "name": "headline_level",
-        "label": "Headline level",
+        "name": "display_logo_or_headline",
+        "label": "Show at the top",
         "type": "choice",
-        "display": "select",
-        "default": "h2",
+        "display": "radio",
+        "default": "logo",
         "choices": [
-          [
-            "h2",
-            "Heading 2"
-          ],
-          [
-            "h3",
-            "Heading 3"
-          ],
-          [
-            "h4",
-            "Heading 4"
-          ],
-          [
-            "p",
-            "Not a heading"
-          ]
-        ],
-        "help_text": "Match the page outline. Use Heading 3 if a Heading 2 already sits above.",
-        "visibility": {
-          "controlling_field_path": "display_logo_or_headline",
-          "operator": "EQUAL",
-          "controlling_value_regex": "headline"
-        }
+          ["logo", "A logo"],
+          ["headline", "A headline"],
+          ["both", "Logo and headline"]
+        ]
       },
       {
-        "name": "paragraph_text",
-        "label": "Quote",
-        "type": "richtext",
-        "default": "<p>\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\"</p>"
-      },
-      {
-        "name": "title_text",
-        "label": "Name",
-        "type": "text",
-        "default": "John Smith"
-      },
-      {
-        "name": "subtitle_text",
-        "label": "Role",
-        "type": "text",
-        "default": "CEO of a Company"
-      },
-      {
-        "name": "avatar",
-        "label": "Photo",
+        "name": "logo_img",
+        "label": "Logo",
         "type": "image",
-        "responsive": false,
-        "resizable": false,
-        "help_text": "Optional. Sits beside the name. Rendered as decorative, since the name is already read out.",
+        "responsive": true,
+        "resizable": true,
+        "show_loading": false,
+        "visibility": {
+          "controlling_field_path": "cards.display_logo_or_headline",
+          "operator": "MATCHES_REGEX",
+          "controlling_value_regex": "logo|both"
+        },
         "default": {
-          "size_type": "auto",
-          "src": "",
-          "alt": "",
-          "loading": "lazy"
+          "size_type": "auto_custom_max",
+          "src": "https://26908810.fs1.hubspotusercontent-eu1.net/hubfs/26908810/positive.webp",
+          "alt": "positive",
+          "loading": "lazy",
+          "width": 185,
+          "height": 52,
+          "max_width": 200,
+          "max_height": 56
         }
-      }
-    ]
-  },
-  {
-    "name": "button",
-    "label": "Button",
-    "type": "group",
-    "expanded": false,
-    "children": [
-      {
-        "name": "show",
-        "label": "Show a button",
-        "type": "boolean",
-        "display": "toggle",
-        "default": false
       },
       {
-        "name": "button_text",
-        "label": "Button text",
-        "type": "text",
-        "default": "Read the story"
-      },
-      {
-        "name": "link",
-        "label": "Button link",
-        "type": "link",
-        "supported_types": [
-          "EXTERNAL",
-          "CONTENT",
-          "FILE",
-          "EMAIL_ADDRESS",
-          "BLOG",
-          "CALL_TO_ACTION",
-          "PHONE_NUMBER"
-        ],
-        "default": {
-          "url": {
-            "content_id": null,
-            "type": "EXTERNAL",
-            "href": ""
+        "name": "text_content",
+        "label": "Text",
+        "type": "group",
+        "expanded": true,
+        "children": [
+          {
+            "name": "headline_text",
+            "label": "Headline",
+            "type": "text",
+            "default": "Hello world",
+            "visibility": {
+              "controlling_field_path": "cards.display_logo_or_headline",
+              "operator": "MATCHES_REGEX",
+              "controlling_value_regex": "headline|both"
+            }
           },
-          "open_in_new_tab": false,
-          "no_follow": false
+          {
+            "name": "headline_level",
+            "label": "Headline level",
+            "type": "choice",
+            "display": "select",
+            "default": "h2",
+            "choices": [
+              ["h2", "Heading 2"],
+              ["h3", "Heading 3"],
+              ["h4", "Heading 4"],
+              ["p", "Not a heading"]
+            ],
+            "help_text": "Match the page outline. Use Heading 3 if a Heading 2 already sits above.",
+            "visibility": {
+              "controlling_field_path": "cards.display_logo_or_headline",
+              "operator": "MATCHES_REGEX",
+              "controlling_value_regex": "headline|both"
+            }
+          },
+          {
+            "name": "paragraph_text",
+            "label": "Quote",
+            "type": "richtext",
+            "default": "<p>\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\"</p>"
+          },
+          {
+            "name": "title_text",
+            "label": "Name",
+            "type": "text",
+            "default": "John Smith"
+          },
+          {
+            "name": "subtitle_text",
+            "label": "Role",
+            "type": "text",
+            "default": "CEO of a Company"
+          },
+          {
+            "name": "avatar",
+            "label": "Photo",
+            "type": "image",
+            "responsive": false,
+            "resizable": false,
+            "help_text": "Optional. Sits beside the name. Rendered as decorative, since the name is already read out.",
+            "default": {
+              "size_type": "auto",
+              "src": "",
+              "alt": "",
+              "loading": "lazy"
+            }
+          }
+        ]
+      },
+      {
+        "name": "button",
+        "label": "Button",
+        "type": "group",
+        "expanded": false,
+        "children": [
+          {
+            "name": "show",
+            "label": "Show a button",
+            "type": "boolean",
+            "display": "toggle",
+            "default": false
+          },
+          {
+            "name": "button_text",
+            "label": "Button text",
+            "type": "text",
+            "default": "Read the story"
+          },
+          {
+            "name": "link",
+            "label": "Button link",
+            "type": "link",
+            "supported_types": [
+              "EXTERNAL",
+              "CONTENT",
+              "FILE",
+              "EMAIL_ADDRESS",
+              "BLOG",
+              "CALL_TO_ACTION",
+              "PHONE_NUMBER"
+            ],
+            "default": {
+              "url": {
+                "content_id": null,
+                "type": "EXTERNAL",
+                "href": ""
+              },
+              "open_in_new_tab": false,
+              "no_follow": false
+            }
+          }
+        ]
+      }
+    ],
+    "default": [
+      {
+        "display_logo_or_headline": "logo",
+        "logo_img": {
+          "size_type": "auto_custom_max",
+          "src": "https://26908810.fs1.hubspotusercontent-eu1.net/hubfs/26908810/positive.webp",
+          "alt": "positive",
+          "loading": "lazy",
+          "width": 185,
+          "height": 52,
+          "max_width": 200,
+          "max_height": 56
+        },
+        "text_content": {
+          "headline_text": "Hello world",
+          "headline_level": "h2",
+          "paragraph_text": "<p>\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\"</p>",
+          "title_text": "John Smith",
+          "subtitle_text": "CEO of a Company",
+          "avatar": {
+            "size_type": "auto",
+            "src": "",
+            "alt": "",
+            "loading": "lazy"
+          }
+        },
+        "button": {
+          "show": false,
+          "button_text": "Read the story",
+          "link": {
+            "url": {
+              "content_id": null,
+              "type": "EXTERNAL",
+              "href": ""
+            },
+            "open_in_new_tab": false,
+            "no_follow": false
+          }
         }
       }
     ]
@@ -191,16 +228,10 @@
                 "display": "radio",
                 "default": "stacked",
                 "choices": [
-                  [
-                    "stacked",
-                    "Everything stacked"
-                  ],
-                  [
-                    "side",
-                    "Logo or photo beside the text"
-                  ]
+                  ["stacked", "Everything stacked"],
+                  ["side", "Logo / headline beside the text"]
                 ],
-                "help_text": "Side by side stacks on its own when the card is narrow."
+                "help_text": "Side by side stacks on its own when a card is narrow, e.g. with three cards in a row."
               },
               {
                 "name": "align",
@@ -209,14 +240,8 @@
                 "display": "radio",
                 "default": "left",
                 "choices": [
-                  [
-                    "left",
-                    "Left"
-                  ],
-                  [
-                    "center",
-                    "Centred"
-                  ]
+                  ["left", "Left"],
+                  ["center", "Centred"]
                 ]
               },
               {
@@ -226,16 +251,10 @@
                 "display": "radio",
                 "default": "contained",
                 "choices": [
-                  [
-                    "contained",
-                    "Capped and centred"
-                  ],
-                  [
-                    "fill",
-                    "Fill the column"
-                  ]
+                  ["contained", "Capped and centred"],
+                  ["fill", "Fill the row"]
                 ],
-                "help_text": "Fill is for placing the card in a two or three column row."
+                "help_text": "Capped limits each card to the maximum width below. Fill lets the cards share the full width."
               },
               {
                 "name": "avatar_size",
@@ -259,28 +278,19 @@
                 "name": "headline_text_color",
                 "label": "Headline",
                 "type": "color",
-                "default": {
-                  "color": "#1A1A1A",
-                  "opacity": 100
-                }
+                "default": { "color": "#1A1A1A", "opacity": 100 }
               },
               {
                 "name": "card_title_text_color",
                 "label": "Name",
                 "type": "color",
-                "default": {
-                  "color": "#1A1A1A",
-                  "opacity": 100
-                }
+                "default": { "color": "#1A1A1A", "opacity": 100 }
               },
               {
                 "name": "card_subtitle_text_color",
                 "label": "Role",
                 "type": "color",
-                "default": {
-                  "color": "#6F6F6F",
-                  "opacity": 100
-                },
+                "default": { "color": "#6F6F6F", "opacity": 100 },
                 "help_text": "Keep this at 4.5:1 against the card background or lighter text fails WCAG AA."
               }
             ]
@@ -295,16 +305,13 @@
                 "name": "card_background_color",
                 "label": "Background",
                 "type": "color",
-                "default": {
-                  "color": "#FFFFFF",
-                  "opacity": 100
-                }
+                "default": { "color": "#FFFFFF", "opacity": 100 }
               },
               {
                 "name": "card_width",
-                "label": "Maximum width",
+                "label": "Maximum card width",
                 "type": "number",
-                "min": 320,
+                "min": 280,
                 "max": 1600,
                 "step": 10,
                 "suffix": "px",
@@ -341,10 +348,7 @@
                 "name": "shadow_color",
                 "label": "Shadow colour",
                 "type": "color",
-                "default": {
-                  "color": "#35B28D",
-                  "opacity": 100
-                },
+                "default": { "color": "#35B28D", "opacity": 100 },
                 "visibility": {
                   "controlling_field_path": "card_style.card_layout.card_style.show_shadow",
                   "operator": "EQUAL",
@@ -401,90 +405,15 @@
     "type": "group",
     "tab": "STYLE",
     "children": [
-      {
-        "name": "bg",
-        "label": "Background",
-        "type": "color",
-        "default": {
-          "color": "#C3F73A",
-          "opacity": 100
-        }
-      },
-      {
-        "name": "text",
-        "label": "Text",
-        "type": "color",
-        "default": {
-          "color": "#101913",
-          "opacity": 100
-        }
-      },
-      {
-        "name": "hover_bg",
-        "label": "Hover background",
-        "type": "color",
-        "default": {
-          "color": "#35B28D",
-          "opacity": 100
-        }
-      },
-      {
-        "name": "hover_text",
-        "label": "Hover text",
-        "type": "color",
-        "default": {
-          "color": "#111111",
-          "opacity": 100
-        }
-      },
-      {
-        "name": "shadow_color",
-        "label": "Shadow colour",
-        "type": "color",
-        "default": {
-          "color": "#35B28D",
-          "opacity": 100
-        }
-      },
-      {
-        "name": "shadow_depth",
-        "label": "Shadow depth",
-        "type": "number",
-        "min": 0,
-        "max": 12,
-        "step": 1,
-        "suffix": "px",
-        "default": 5
-      },
-      {
-        "name": "radius",
-        "label": "Corner radius",
-        "type": "number",
-        "min": 0,
-        "max": 30,
-        "step": 1,
-        "suffix": "px",
-        "default": 8
-      },
-      {
-        "name": "size",
-        "label": "Text size",
-        "type": "number",
-        "min": 11,
-        "max": 20,
-        "step": 1,
-        "suffix": "px",
-        "default": 15
-      },
-      {
-        "name": "focus_color",
-        "label": "Keyboard focus ring",
-        "type": "color",
-        "default": {
-          "color": "#1D624D",
-          "opacity": 100
-        }
-      }
+      { "name": "bg", "label": "Background", "type": "color", "default": { "color": "#C3F73A", "opacity": 100 } },
+      { "name": "text", "label": "Text", "type": "color", "default": { "color": "#101913", "opacity": 100 } },
+      { "name": "hover_bg", "label": "Hover background", "type": "color", "default": { "color": "#35B28D", "opacity": 100 } },
+      { "name": "hover_text", "label": "Hover text", "type": "color", "default": { "color": "#111111", "opacity": 100 } },
+      { "name": "shadow_color", "label": "Shadow colour", "type": "color", "default": { "color": "#35B28D", "opacity": 100 } },
+      { "name": "shadow_depth", "label": "Shadow depth", "type": "number", "min": 0, "max": 12, "step": 1, "suffix": "px", "default": 5 },
+      { "name": "radius", "label": "Corner radius", "type": "number", "min": 0, "max": 30, "step": 1, "suffix": "px", "default": 8 },
+      { "name": "size", "label": "Text size", "type": "number", "min": 11, "max": 20, "step": 1, "suffix": "px", "default": 15 },
+      { "name": "focus_color", "label": "Keyboard focus ring", "type": "color", "default": { "color": "#1D624D", "opacity": 100 } }
     ]
   },
   {
@@ -493,36 +422,9 @@
     "type": "group",
     "tab": "STYLE",
     "children": [
-      {
-        "name": "headline_size",
-        "label": "Headline",
-        "type": "number",
-        "min": 14,
-        "max": 60,
-        "step": 1,
-        "suffix": "px",
-        "default": 26
-      },
-      {
-        "name": "title_size",
-        "label": "Name",
-        "type": "number",
-        "min": 12,
-        "max": 32,
-        "step": 1,
-        "suffix": "px",
-        "default": 18
-      },
-      {
-        "name": "subtitle_size",
-        "label": "Role",
-        "type": "number",
-        "min": 10,
-        "max": 24,
-        "step": 1,
-        "suffix": "px",
-        "default": 15
-      }
+      { "name": "headline_size", "label": "Headline", "type": "number", "min": 14, "max": 60, "step": 1, "suffix": "px", "default": 26 },
+      { "name": "title_size", "label": "Name", "type": "number", "min": 12, "max": 32, "step": 1, "suffix": "px", "default": 18 },
+      { "name": "subtitle_size", "label": "Role", "type": "number", "min": 10, "max": 24, "step": 1, "suffix": "px", "default": 15 }
     ]
   }
 ]
